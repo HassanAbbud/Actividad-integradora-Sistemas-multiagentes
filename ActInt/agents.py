@@ -10,7 +10,7 @@ def get_distance(pos_1, pos_2):
   dy = y1 - y2
 
   return math.sqrt(dx ** 2 + dy ** 2)
-
+  
 
 class Boxbot(Agent):
   def __init__(self, pos, model, moore = False, package = 0, energy = 0, vision = 0):
@@ -22,7 +22,7 @@ class Boxbot(Agent):
     self.vision = vision
 
 #Get package
-  def get_box(self, pos):
+  def get_package(self, pos):
     this_cell = self.model.grid.get_cell_list_contents([pos])
     print("Agents in cell", this_cell)
     for agent in this_cell:
@@ -45,8 +45,8 @@ class Boxbot(Agent):
     self.model.grid.move_agent(self, next_move)
  
   def pick(self):
-    box_patch = self.get_box(self.pos)
-    print(box_patch)
+    package_patch = self.get_package(self.pos)
+    print(package_patch)
       
   def step(self):
     self.move()
