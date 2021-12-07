@@ -3,7 +3,7 @@ from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
 from agents import Boxbot, Package
-from schedule import RandomActivationByBreed
+from schedule import RandomActivationBySpawn
 
 class Warehouse(Model):
   verbose = True
@@ -15,11 +15,11 @@ class Warehouse(Model):
     self.width = width
     self.initial_population = initial_population
 
-    self.schedule = RandomActivationByBreed(self)
+    self.schedule = RandomActivationBySpawn(self)
     self.grid = MultiGrid(self.height, self.width, torus = False)
     self.datacollector = DataCollector(
-      {"Boxbot": lambda m: m.schedule.get_breed_count(Boxbot),
-      "Package": lambda m: m.schedule.get_breed_count(Package)}
+      {"Boxbot": lambda m: m.schedule.get_spawn_count(Boxbot),
+      "Package": lambda m: m.schedule.get_spawn_count(Package)}
     )
 
     #Create package
@@ -31,7 +31,6 @@ class Warehouse(Model):
       self.grid.place_agent(package, (x,y))
       self.schedule.add(package)
       self.datacollector.collect(self)
-
 
     #Create agent
     for i in range(self.initial_population):
@@ -53,13 +52,13 @@ class Warehouse(Model):
     self.datacollector.collect(self)
     if self.verbose:
       print("Data:")
-      print([self.schedule.time, self.schedule.get_breed_count(Boxbot)])
+      print([self.schedule.time, self.schedule.get_spawn_count(Boxbot)])
   
   def run_model(self, step_count = 200):
     if self.verbose:
       print(
         "Initial bot count:",
-        self.schedule.get_breed_count(Boxbot),
+        self.schedule.get_spawn_count(Boxbot),
       )
     for i in range(step_count):
       self.step()
@@ -68,5 +67,5 @@ class Warehouse(Model):
       print("")
       print(
         "Final bot count:",
-        self.schedule.get_breed_count(Boxbot),
+        self.schedule.get_spawn_count(Boxbot),
       )
